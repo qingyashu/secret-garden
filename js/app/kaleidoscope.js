@@ -23,7 +23,6 @@ define(['app/ring', 'app/svg-canvas', 'app/painter', 'app/utils'], function(Ring
         this._ringList.forEach(function(ring) {
           ring.draw();
         });
-        this._drawBackground();
       }
 
       _drawBackground() {
@@ -43,17 +42,24 @@ define(['app/ring', 'app/svg-canvas', 'app/painter', 'app/utils'], function(Ring
         var sepList = [0];
         var avg = this._radius / this._numRing;
         var pos = 0;
+        var randomRange = avg / 2;
+        var base = avg - randomRange / 2;
         for (var i = 0; i < this._numRing-1; i ++) {
-          var r = Math.random() * avg + avg / 2;
+          var r = Math.random() * randomRange + base;
           pos += r;
           if (pos < this._radius) {
             sepList.push(pos);
           }
         }
         sepList.push(this._radius);
-        // for (var i = 1; i < sepList.length; i ++) {
         for (var i = sepList.length-1; i >= 1; i --) {
           var ring = new Ring(this._svg, this._center, sepList[i-1], sepList[i]);
+          if (i == 1) {
+            ring.setIsCenterCircle(true);
+          }
+          if (i == sepList.length-1) {
+            ring.setIsOuterCircle(true);
+          }
           this._ringList.push(ring);
         }
       }

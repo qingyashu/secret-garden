@@ -1,0 +1,20 @@
+  - make path to shape
+
+=========== UI ============
+  - menu
+    - options: 
+      - color mode
+        - single shape
+        - complementary
+      - color style
+        - show 3 styles
+
+    - buttons
+      - random color
+      - clear 
+      - download
+      - share to facebook, twitter, instagram, weibo
+
+    - link
+      - homepage
+      - explanation blog

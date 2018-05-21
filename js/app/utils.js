@@ -2,8 +2,9 @@ define(function() {
     Utils = {};
 
     Utils.settings = {
-      bgColor: '#FFECCE',
-      strokeColor: '#ffffff',
+      bgColor: '#FFFFFF',
+      strokeColor: '#DDDDDD',
+      fillColor: '#FFFFFF',
     };
     
     Utils.random = function(min, max) {

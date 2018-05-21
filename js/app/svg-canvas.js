@@ -39,6 +39,10 @@ define(function() {
           this._svg.classList.remove('rotatable');
         }
       }
+
+      addClass(className) {
+        this._svg.classList.add(className);
+      }
     }
     return SVGCanvas;
 });
