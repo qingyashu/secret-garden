@@ -29,21 +29,26 @@
           <div class='menu-col'>
             <div class='menu-item'>
               <div>
-                <input type="radio" id="single-shape" name="brush-type">
-                <label for="contactChoice1">Single Shape</label>
+                <input class="brush-type-selector" type="radio" id="single-shape" name="brush-type">
+                <label for="single-shape">Single Shape</label>
               </div>
               <div>
-                <input type="radio" id="comple-shape" name="brush-type">
-                <label for="contactChoice1">Complementary Shapes</label>
+                <input class="brush-type-selector" type="radio" id="comple-shape" name="brush-type" checked="true">
+                <label for="comple-shape">Complementary Shapes</label>
               </div>
             </div>
-            <div class='menu-item'>
+            <!-- <div class='menu-item'> customize color
               <input type="color" value="#ff0000">
-            </div>
-            <div class='menu-item'>
-              <img src='./resources/image/color1.png' />
-              <img src='./resources/image/color1.png' />
-              <img src='./resources/image/color1.png' />
+            </div> -->
+            <div class='menu-item default-palette'>
+              <div class='palette'>
+                <span class='palette-dot checked' color='#f1e8e1' style='background-color: #f1e8e1'></span>
+                <span class='palette-dot' color='#f3c6c0' style='background-color: #f3c6c0'></span>
+                <span class='palette-dot' color='#f48979' style='background-color: #f48979'></span>
+                <span class='palette-dot' color='#f95b42' style='background-color: #f95b42'></span>
+                <span class='palette-dot' color='#b7bc60' style='background-color: #b7bc60'></span>
+                <span class='palette-dot' color='#d9e6b0' style='background-color: #d9e6b0'></span>
+              </div>
             </div>
           </div>
           <div class='menu-col'>

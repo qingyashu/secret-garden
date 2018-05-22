@@ -257,7 +257,7 @@ define(['app/svg-canvas', 'app/painter', 'app/utils', 'app/brush'], function(SVG
           })[0];
           var samePatternChildren = p.getElementsByClassName(patternClassName);
           var indexOfShape = Array.prototype.indexOf.call(samePatternChildren, shapeElement);
-          if (samePatternChildren.length % 4 === 0) { // color every 4
+          if (samePatternChildren.length >= 16 && samePatternChildren.length % 4 === 0) { // color every 4
             for (var i = indexOfShape % 4; i < samePatternChildren.length; i += 4) {
               samePatternChildren[i].setAttribute('fill', Brush.currentColor);
             }

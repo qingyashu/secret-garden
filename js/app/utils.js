@@ -3,7 +3,7 @@ define(function() {
 
     Utils.settings = {
       bgColor: '#FFFFFF',
-      strokeColor: '#DDDDDD',
+      strokeColor: '#EEEEEE',
       fillColor: '#FFFFFF',
     };
     

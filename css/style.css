@@ -88,21 +88,39 @@ svg g.rotatable:hover {
 }
 
 
+svg path {
+  -webkit-transition: fill .3s ease; /* Safari */
+  transition: fill .3s ease;
+}
+
 /*============= menu =============== */
 .menu-wrapper {
   display: flex;
 }
 
 .menu-col {
-  border: gray solid 1px;
   padding: 10px 30px;
   width: 33%;
 }
 
 .menu-row {
-  border: gray solid 1px;
 }
 
 .menu-item {
-  border: gray solid 1px;
 }
+
+.menu-item .palette {
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.palette .palette-dot {
+  height: 30px;
+  width: 100%;
+  border: 3px solid white;
+}
+
+.palette .palette-dot.checked {
+  border-color: black;
+}
+
