@@ -1,4 +1,4 @@
-define(['app/svg-canvas', 'app/painter', 'app/utils'], function(SVGCanvas, Painter, Utils) {
+define(['app/svg-canvas', 'app/painter', 'app/utils', 'app/brush'], function(SVGCanvas, Painter, Utils, Brush) {
     class Ring {
       constructor(svgCanvas, centerPos, innerRadius, outerRadius, numSector) {
         var gElement = document.createElementNS('http://www.w3.org/2000/svg', 'g');
@@ -31,7 +31,15 @@ define(['app/svg-canvas', 'app/painter', 'app/utils'], function(SVGCanvas, Paint
         if (this._isCenterCircle && (this._contentType === 2 || this._contentType === 4)) {
           this._contentType -= 1;
         }
-        this._svg.addClass('pattern-' + this._contentType);
+        var patternString = {
+          0: 'ring-circle-pattern',
+          1: 'ring-triangle-pattern',
+          2: 'ring-pedal-pattern',
+          3: 'ring-arc-pattern',
+          4: 'ring-double-pedal-pattern',
+          5: 'ring-double-triangle-pattern',
+        };
+        this._svg.addClass(patternString[this._contentType]);
       }
 
       draw() {
@@ -53,7 +61,7 @@ define(['app/svg-canvas', 'app/painter', 'app/utils'], function(SVGCanvas, Paint
       _drawInnerContentSector(startAngle, endAngle) {
         switch (this._contentType) {
           case 0: 
-            this._drawCircleInSector(startAngle, endAngle); // TODO 
+            this._drawCircleInSector(startAngle, endAngle);
             break;
           case 1:
             this._drawTriangleInSector(startAngle, endAngle);
@@ -97,11 +105,12 @@ define(['app/svg-canvas', 'app/painter', 'app/utils'], function(SVGCanvas, Paint
         var rightCircleArc = Painter.getEllipseArcString(rightOuterX, rightOuterY, r, r, 0, 1, 0, rightInnerX, rightInnerY, true);
         var innerCircleArc = Painter.getEllipseArcString(rightInnerX, rightInnerY, this._outerRadius, this._outerRadius, 0, 0, 1, leftInnerX, leftInnerY, true);
         var pathString = leftCircleArc + outerCircleArc + rightCircleArc + innerCircleArc + 'Z' ;
-        Painter.drawPath(this._svg, pathString);
+        var betweenArcNode = Painter.drawPath(this._svg, pathString);
+        betweenArcNode.classList.add('pattern-between-circle');
 
         // circle
-        Painter.drawCircle(this._svg, cx, cy, r);
-
+        var circleNode = Painter.drawCircle(this._svg, cx, cy, r);
+        circleNode.classList.add('pattern-circle');
         
       }
 
@@ -111,14 +120,16 @@ define(['app/svg-canvas', 'app/painter', 'app/utils'], function(SVGCanvas, Paint
         var midy = this._outerRadius * Math.sin(midAngle) + this._centerPos.y;
         var pathStr = Painter.getCircleArcString(this._centerPos.x, this._centerPos.y, startAngle, endAngle, this._innerRadius);
         pathStr += ' L' + midx + ',' + midy + 'Z';
-        Painter.drawPath(this._svg, pathStr);
+        var triangleNode = Painter.drawPath(this._svg, pathStr);
+        triangleNode.classList.add('pattern-triangle');
 
         var nextMidAndle = endAngle + (endAngle - startAngle) / 2;
         var nextPathStr = Painter.getCircleArcString(this._centerPos.x, this._centerPos.y, midAngle, nextMidAndle, this._outerRadius);
         var rightx = this._innerRadius * Math.cos(endAngle) + this._centerPos.x;
         var righty = this._innerRadius * Math.sin(endAngle) + this._centerPos.y;
         nextPathStr += ' L' + rightx + ',' + righty + 'Z';
-        Painter.drawPath(this._svg, nextPathStr);
+        var betweenTriangleNode = Painter.drawPath(this._svg, nextPathStr);
+        betweenTriangleNode.classList.add('pattern-between-triangle');
       }
 
       _drawDoubleTriangleInSector(startAngle, endAngle) {
@@ -132,7 +143,8 @@ define(['app/svg-canvas', 'app/painter', 'app/utils'], function(SVGCanvas, Paint
         var mid2y = (this._innerRadius + this._outerRadius) / 2 * Math.sin(midAngle) + this._centerPos.y;
         var pathStr = Painter.getCircleArcString(this._centerPos.x, this._centerPos.y, innerStartAngle, innerEndAngle, this._innerRadius);
         pathStr += ' L' + mid2x + ',' + mid2y + 'Z';
-        Painter.drawPath(this._svg, pathStr);
+        var innerTriangleNode = Painter.drawPath(this._svg, pathStr);
+        innerTriangleNode.classList.add('pattern-inner-triangle');
       }
 
       _drawArcInSector(startAngle, endAngle) {
@@ -150,7 +162,8 @@ define(['app/svg-canvas', 'app/painter', 'app/utils'], function(SVGCanvas, Paint
         var ry = Utils.distance(leftx, lefty, rightx, righty) / 2;
         var pathStr = Painter.getEllipseArcString(leftx, lefty, rx, ry, midAngle / Math.PI * 180, 1, 1, rightx, righty);
         pathStr += Painter.getCircleArcString(this._centerPos.x, this._centerPos.y, endAngle, startAngle, this._innerRadius, true);
-        Painter.drawPath(this._svg, pathStr);
+        var outerArcNode = Painter.drawPath(this._svg, pathStr);
+        outerArcNode.classList.add('pattern-outer-pedal');
 
         // space between this and next arc
         var nextMidAndle = endAngle + (endAngle - startAngle) / 2;
@@ -159,7 +172,8 @@ define(['app/svg-canvas', 'app/painter', 'app/utils'], function(SVGCanvas, Paint
         var circleArc = Painter.getCircleArcString(this._centerPos.x, this._centerPos.y, midAngle, nextMidAndle, this._outerRadius);
         var nextHalfArc = Painter.getEllipseArcString(nextPeakX, nextPeakY, rx, ry, nextMidAndle / Math.PI * 180, 0, 0, rightx, righty, true);
         var halfArc = Painter.getEllipseArcString(rightx, righty, rx, ry, midAngle / Math.PI * 180, 0, 0, peakX, peakY, true);
-        Painter.drawPath(this._svg, circleArc + nextHalfArc + halfArc);
+        var betweenPedalNode = Painter.drawPath(this._svg, circleArc + nextHalfArc + halfArc);
+        betweenPedalNode.classList.add('pattern-between-pedal');
       }
 
       _drawDoubleArcInSector(startAngle, endAngle) {
@@ -181,7 +195,8 @@ define(['app/svg-canvas', 'app/painter', 'app/utils'], function(SVGCanvas, Paint
         var r2y = Utils.distance(leftInnerX, leftInnerY, rightInnerX, rightInnerY) / 2;
         var pathStr = Painter.getEllipseArcString(leftInnerX, leftInnerY, r2x, r2y, midAngle / Math.PI * 180, 0, 1, rightInnerX, rightInnerY);
         pathStr += Painter.getCircleArcString(this._centerPos.x, this._centerPos.y, innerEndAngle, innerStartAngle, this._innerRadius, true);
-        Painter.drawPath(this._svg, pathStr);
+        var innerPedalNode = Painter.drawPath(this._svg, pathStr);
+        innerPedalNode.classList.add('pattern-inner-pedal');
       }
 
       _drawLineInSector(startAngle, endAngle) {
@@ -208,7 +223,8 @@ define(['app/svg-canvas', 'app/painter', 'app/utils'], function(SVGCanvas, Paint
         var circleArc2Str = Painter.getCircleArcString(this._centerPos.x, this._centerPos.y, endAngle, startAngle, this._innerRadius, true);
 
         var pathStr = path1 + circleArc1Str + path2 + circleArc2Str + 'Z';
-        Painter.drawPath(this._svg, pathStr);
+        var lineNode = Painter.drawPath(this._svg, pathStr);
+        lineNode.classList.add('pattern-arc');
       }
 
       _drawOuterCircle() {
@@ -216,6 +232,42 @@ define(['app/svg-canvas', 'app/painter', 'app/utils'], function(SVGCanvas, Paint
           fill: 'white',
           "fill-opacity": '0'
         });
+      }
+
+      belongsTo(shapeElement) {
+        var p = shapeElement;
+        var rootNode = this._svg.getElement();
+        while (p) {
+          if (p == rootNode) {
+            return true;
+          }
+          p = p.parentElement;
+        }
+        return false;
+      }
+
+      brushColor(shapeElement) {
+        if (Brush.isSingleMode()) {
+          shapeElement.setAttribute('fill', Brush.currentColor);
+        }
+        else {
+          var p = shapeElement.parentElement;
+          var patternClassName = Array.prototype.filter.call(shapeElement.classList, function(c) {
+            return c.startsWith('pattern');
+          })[0];
+          var samePatternChildren = p.getElementsByClassName(patternClassName);
+          var indexOfShape = Array.prototype.indexOf.call(samePatternChildren, shapeElement);
+          if (samePatternChildren.length % 4 === 0) { // color every 4
+            for (var i = indexOfShape % 4; i < samePatternChildren.length; i += 4) {
+              samePatternChildren[i].setAttribute('fill', Brush.currentColor);
+            }
+          }
+          else { // color every 2
+            for (var i = indexOfShape % 2; i < samePatternChildren.length; i += 2) {
+              samePatternChildren[i].setAttribute('fill', Brush.currentColor);
+            }
+          }
+        }
       }
     }
     return Ring;

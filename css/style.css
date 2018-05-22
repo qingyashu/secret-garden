@@ -15,7 +15,6 @@ body,
 
 .entrance-wrapper {
   position: relative;
-  height: 50%;
   background-color: rgba(255, 255, 255, 1);
 }
 
@@ -88,3 +87,22 @@ svg g.rotatable:hover {
   100% { -webkit-transform: rotate(0deg); transform:rotate(0deg); } 
 }
 
+
+/*============= menu =============== */
+.menu-wrapper {
+  display: flex;
+}
+
+.menu-col {
+  border: gray solid 1px;
+  padding: 10px 30px;
+  width: 33%;
+}
+
+.menu-row {
+  border: gray solid 1px;
+}
+
+.menu-item {
+  border: gray solid 1px;
+}

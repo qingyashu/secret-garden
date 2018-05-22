@@ -30,6 +30,7 @@ define(['app/svg-canvas', 'app/utils'], function(SVGCanvas, Utils) {
       node.setAttribute('stroke', stroke);
       node.setAttribute('stroke-width', strokeWidth);
       svg.appendChild(node);
+      return node;
     }
 
     Painter.drawArc = function(svg, sx, sy, rx, ry, xAxisRotation, largeArcFlag, sweepFlag, ex, ey, style) {
@@ -47,6 +48,7 @@ define(['app/svg-canvas', 'app/utils'], function(SVGCanvas, Utils) {
       node.setAttribute('stroke', stroke);
       node.setAttribute('stroke-width', strokeWidth);
       svg.appendChild(node);
+      return node;
     }
 
     Painter.drawDonus = function(svg, cx, cy, innerRadius, outerRadius, style) {
@@ -66,6 +68,7 @@ define(['app/svg-canvas', 'app/utils'], function(SVGCanvas, Utils) {
       node.setAttribute('stroke', stroke);
       node.setAttribute('stroke-width', strokeWidth);
       svg.appendChild(node);
+      return node;
     }
 
     Painter.drawDonusArc = function(svg, centerX, centerY, innerRadius, outerRadius, startAngle, endAngle, style) {
@@ -91,6 +94,7 @@ define(['app/svg-canvas', 'app/utils'], function(SVGCanvas, Utils) {
       node.setAttribute('stroke', stroke);
       node.setAttribute('stroke-width', strokeWidth);
       svg.appendChild(node);
+      return node;
     }
 
     Painter.getEllipseArcString = function(sx, sy, rx, ry, xAxisRotation, largeArcFlag, sweepFlag, ex, ey, isContinue) {
@@ -129,6 +133,7 @@ define(['app/svg-canvas', 'app/utils'], function(SVGCanvas, Utils) {
       node.setAttribute('stroke', stroke);
       node.setAttribute('stroke-width', strokeWidth);
       svg.appendChild(node);
+      return node;
     }
 
     return Painter;

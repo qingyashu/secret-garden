@@ -64,6 +64,27 @@ define(['app/ring', 'app/svg-canvas', 'app/painter', 'app/utils'], function(Ring
         }
       }
 
+      belongsTo(shapeElement) {
+        var p = shapeElement;
+        var rootNode = this._svg.getElement();
+        while (p) {
+          if (p == rootNode) {
+            return true;
+          }
+          p = p.parentElement;
+        }
+        return false;
+      }
+
+      brushColor(shapeElement) {
+        for (var i = 0; i < this._ringList.length; i ++) {
+          var ring = this._ringList[i];
+          if (ring.belongsTo(shapeElement)) {
+            ring.brushColor(shapeElement);
+            return;
+          }
+        }
+      }
     }
     return Kaleidoscope;
 });

@@ -12,6 +12,7 @@ define(['app/kaleidoscope', 'app/svg-canvas', 'app/utils'], function(Kaleidoscop
       
       this._kaleidoscopeList = [];
       this._generateKaleidoscopes();
+      this._bindEventHandler();
     }
 
     _generateKaleidoscopes() {
@@ -43,6 +44,22 @@ define(['app/kaleidoscope', 'app/svg-canvas', 'app/utils'], function(Kaleidoscop
       this._kaleidoscopeList.forEach(function(k) {
         k.draw();
       });
+    }
+
+    _bindEventHandler() {
+      this._svg.getElement().addEventListener('click', this._handleClick.bind(this));
+    }
+
+    _handleClick(event) {
+      var target = event.target;
+      if (!target) return;
+      for (var i = 0; i < this._kaleidoscopeList.length; i ++) {
+        var k = this._kaleidoscopeList[i];
+        if (k.belongsTo(target)) {
+          k.brushColor(target);
+          break;
+        }
+      }
     }
     
   }

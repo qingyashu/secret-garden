@@ -43,6 +43,10 @@ define(function() {
       addClass(className) {
         this._svg.classList.add(className);
       }
+
+      getElement() {
+        return this._svg;
+      }
     }
     return SVGCanvas;
 });
